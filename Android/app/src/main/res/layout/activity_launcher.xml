@@ -24,4 +24,10 @@
         android:text="Get Details"
         android:id="@+id/deatils"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Museum"
+        android:id="@+id/museum"/>
+
 </LinearLayout>

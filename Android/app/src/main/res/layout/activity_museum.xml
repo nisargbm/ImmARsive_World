@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".MuseumActivity">
 
-    <fragment android:name="com.mangnaik.yogesh.bitcamphackathon.CustomARFragment"
+    <fragment android:name="com.google.ar.sceneform.ux.ArFragment"
         android:id="@+id/ux_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

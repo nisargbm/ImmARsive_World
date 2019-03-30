@@ -1,5 +1,6 @@
 package com.mangnaik.yogesh.bitcamphackathon;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -9,6 +10,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +20,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -31,7 +36,10 @@ import com.google.ar.core.Session;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.FrameTime;
+import com.google.ar.sceneform.math.Quaternion;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
@@ -52,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements ARActivity{
     CustomARFragment arFragment;
 
     boolean shouldAddModel = true;
+    Handler handler;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +72,13 @@ public class MainActivity extends AppCompatActivity implements ARActivity{
 
         arFragment = (CustomARFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
+        handler = new Handler(Looper.getMainLooper());
+
         assert arFragment != null;
         arFragment.getPlaneDiscoveryController().hide();
         arFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
+
+        view = getLayoutInflater().inflate(R.layout.layout_restaurant, null);
     }
 
     @Override
@@ -100,19 +114,58 @@ public class MainActivity extends AppCompatActivity implements ARActivity{
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void onUpdateFrame(FrameTime frameTime) {
         Frame frame = arFragment.getArSceneView().getArFrame();
+        assert frame != null;
         Collection<AugmentedImage> augmentedImages = frame.getUpdatedTrackables(AugmentedImage.class);
         for (AugmentedImage augmentedImage : augmentedImages) {
             if (augmentedImage.getTrackingState() == TrackingState.TRACKING) {
                 if (shouldAddModel) {
-                    System.out.println("Found image : " + augmentedImage.getName());
-                    System.out.println("Found ID : " + augmentedImage.getIndex());
                     Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     v.vibrate(500);
-                    //placeObject(arFragment, augmentedImage.createAnchor(augmentedImage.getCenterPose()), Uri.parse("Lamborghini_Aventador.sfb"));
+                    String id = augmentedImage.getName().split("\\.")[0];
+                    System.out.println(id);
+                    NetworkHelper.getRestaurantDetails(id, new CallbackInterface() {
+                        @Override
+                        public void callback(Restaurant restaurant) {
+                            MainActivity.this.placeView(augmentedImage, restaurant);
+                            System.out.println(restaurant);
+                        }
+                    }, this);
                     shouldAddModel = false;
                 }
             }
         }
+    }
+
+    private void placeView(AugmentedImage augmentedImage, Restaurant restaurant){
+        ViewRenderable.builder()
+                .setView(this, view)
+                .build()
+                .thenAccept(modelRenderable -> addNodeToScene(arFragment, augmentedImage.createAnchor(augmentedImage.getCenterPose()), modelRenderable));
+
+        TextView tvName = view.findViewById(R.id.tv_name);
+        TextView tvPrice = view.findViewById(R.id.tv_fortwo);
+        TextView tvRating = view.findViewById(R.id.tv_rating);
+
+        tvName.setText(restaurant.name);
+        tvPrice.setText("Rs. : " + restaurant.costForTwo + " for Two");
+        tvRating.setText(restaurant.aggRating+"\n"+restaurant.ratingText);
+    }
+
+    private void addNodeToScene(ArFragment arFragment, Anchor anchor, Renderable renderable) {
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        //anchorNode.setLocalRotation(Quaternion.axisAngle(new Vector3(0f,0f,-1f), 90f));
+        TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+
+        node.setWorldRotation(new Quaternion(Quaternion.axisAngle(Vector3.up(), 0f)));
+        node.getScaleController().setMaxScale(0.1f);
+        node.getScaleController().setMinScale(0.035f);
+        node.setWorldRotation(Quaternion.axisAngle(new Vector3(1f, 0f, 0f), 270));
+        node.setLocalPosition(new Vector3(0.12f,0f,-0.01f));
+
+        node.setRenderable(renderable);
+        node.setParent(anchorNode);
+        arFragment.getArSceneView().getScene().addChild(anchorNode);
+        node.select();
     }
 
     public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {

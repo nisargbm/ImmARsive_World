@@ -8,6 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.ar.core.Anchor;
+import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.math.Quaternion;
+import com.google.ar.sceneform.math.Vector3;
+import com.google.ar.sceneform.rendering.Renderable;
+import com.google.ar.sceneform.ux.ArFragment;
+import com.google.ar.sceneform.ux.TransformableNode;
+
 public class LauncherActivity extends AppCompatActivity {
 
     ProgressDialog dialog;
@@ -24,8 +32,14 @@ public class LauncherActivity extends AppCompatActivity {
             startActivity(i);
         });
 
+        Button museum = findViewById(R.id.museum);
+        museum.setOnClickListener(v -> {
+            Intent i = new Intent(LauncherActivity.this, MuseumActivity.class);
+            startActivity(i);
+        });
+
         Button details = findViewById(R.id.deatils);
-        details.setOnClickListener(v -> NetworkHelper.getRestaurantDetails(35092, restaurant -> {}, this));
+        details.setOnClickListener(v -> NetworkHelper.getRestaurantDetails("35092", restaurant -> {}, this));
 
         Button update = findViewById(R.id.update);
         update.setOnClickListener(v -> {
@@ -55,4 +69,6 @@ public class LauncherActivity extends AppCompatActivity {
             });
         });
     }
+
+
 }

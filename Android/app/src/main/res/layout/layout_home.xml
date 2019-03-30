@@ -7,28 +7,32 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/iv_uc1"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="#263238"
-        android:id="@+id/iv_uc1"/>
+        android:layout_margin="13dp"
+        android:background="#263238" />
 
     <ImageView
+        android:id="@+id/iv_uc2"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="#263238"
-        android:id="@+id/iv_uc2"/>
+        android:layout_margin="13dp"
+        android:background="#263238" />
 
     <ImageView
+        android:id="@+id/iv_uc3"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="#263238"
-        android:id="@+id/iv_uc3"/>
+        android:layout_margin="13dp"
+        android:background="#263238" />
 
     <ImageView
+        android:id="@+id/iv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:src="@drawable/bg_home"
-        android:id="@+id/iv"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_home" />
 
 </LinearLayout>

@@ -52,7 +52,7 @@ class NetworkHelper {
         mRequestQueue.add(request);
     }
 
-    static void getRestaurantDetails(int restaurantId, CallbackInterface callback, Context context){
+    static void getRestaurantDetails(String restaurantId, CallbackInterface callback, Context context){
         String url = Constants.restDetailsIP + Constants.restDetailsURL + restaurantId;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
