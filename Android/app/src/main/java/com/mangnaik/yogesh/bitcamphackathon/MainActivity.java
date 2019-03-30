@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,9 @@ import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -65,11 +69,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean setupAugmentedImagesDb(Config config, Session session) throws IOException {
         System.out.println("Setting up Augmented image database");
         AugmentedImageDatabase augmentedImageDatabase;
-        Bitmap bitmap = loadAugmentedImage();
-        if (bitmap == null) {
-            return false;
-        }
-        InputStream inputStream = this.getAssets().open("image.imgdb");
+        String name="image.imgdb";
+        File dir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/");
+        File imageFile = new File(dir.getAbsoluteFile()+"/"+name);
+        InputStream inputStream = new FileInputStream(imageFile);
         augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, inputStream);
         config.setAugmentedImageDatabase(augmentedImageDatabase);
         System.out.println("Augmented image database set up");

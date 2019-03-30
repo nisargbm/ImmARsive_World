@@ -16,7 +16,6 @@ class InputStreamVolleyRequest extends Request<byte[]> {
     private final Response.Listener<byte[]> mListener;
     private Map<String, String> mParams;
 
-    //create a static map for directly accessing headers
     public Map<String, String> responseHeaders ;
 
     public InputStreamVolleyRequest(int method, String mUrl ,Response.Listener<byte[]> listener,

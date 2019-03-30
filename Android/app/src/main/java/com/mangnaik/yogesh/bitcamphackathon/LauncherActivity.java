@@ -37,44 +37,12 @@ public class LauncherActivity extends AppCompatActivity {
             startActivity(i);
         });
 
+        Button details = findViewById(R.id.deatils);
+        details.setOnClickListener(v -> NetworkHelper.getRestaurantDetails(35092, restaurant -> {
+
+        }, this));
+
         Button update = findViewById(R.id.update);
-        update.setOnClickListener(v -> downloadFile());
-    }
-
-    private void downloadFile() {
-        InputStreamVolleyRequest request = new InputStreamVolleyRequest(Request.Method.GET, "http://192.168.137.184:4000/fetchIMDB",
-                response -> {
-
-                    // TODO handle the response
-                    try {
-                        if (response!=null) {
-                            String name="image.imgdb";
-                            File dir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/");
-                            if(!dir.exists())
-                                dir.mkdirs();
-
-                            File imageFile = new File(dir.getAbsoluteFile()+"/"+name);
-
-                            FileOutputStream stream = new FileOutputStream(imageFile);
-
-                            try {
-                                stream.write(response);
-                            } finally {
-                                stream.close();
-                            }
-                            Toast.makeText(LauncherActivity.this, "Download complete.", Toast.LENGTH_LONG).show();
-
-                        }
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        Log.d("ERROR!!", "NOT DOWNLOADED");
-                        e.printStackTrace();
-                    }
-                }, error -> {
-                    // TODO handle the error
-                    error.printStackTrace();
-                }, null);
-        RequestQueue mRequestQueue = Volley.newRequestQueue(getApplicationContext(), new HurlStack());
-        mRequestQueue.add(request);
+        update.setOnClickListener(v -> NetworkHelper.downloadFile(this, Constants.imgdbIP+Constants.imgdbURL));
     }
 }
