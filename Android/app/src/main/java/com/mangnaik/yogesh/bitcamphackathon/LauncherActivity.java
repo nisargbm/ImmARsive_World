@@ -57,10 +57,15 @@ public class LauncherActivity extends AppCompatActivity {
                 public void callback(boolean success) {
                     if(success){
                         dialog.hide();
+                        new AlertDialog.Builder(LauncherActivity.this)
+                                .setTitle("Success")
+                                .setMessage("Updated the database successfully")
+                                .setPositiveButton(android.R.string.yes, null)
+                                .show();
                     }
                     else{
                         new AlertDialog.Builder(LauncherActivity.this)
-                                .setTitle("Alert")
+                                .setTitle("Failure")
                                 .setMessage("Failed to download the database")
                                 .setNegativeButton(android.R.string.no, null)
                                 .show();

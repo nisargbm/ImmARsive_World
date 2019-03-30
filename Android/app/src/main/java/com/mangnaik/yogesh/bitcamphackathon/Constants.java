@@ -5,7 +5,7 @@ package com.mangnaik.yogesh.bitcamphackathon;
  */
 class Constants {
     //urls
-    static String imgdbURL = "/fetchIMDB";
+    static String imgdbURL = "/fetchIMGDB";
     static String restDetailsURL = "/res/";
 
     //filenames
