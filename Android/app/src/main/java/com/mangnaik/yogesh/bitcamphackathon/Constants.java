@@ -12,6 +12,6 @@ class Constants {
     static final String databaseFileName = "image.imgdb";
 
     //ips
-    static String imgdbIP = "http://192.168.137.184:4000";
-    static String restDetailsIP = "http://192.168.137.184:4000";
+    static String imgdbIP = "http://192.168.137.1:4000";
+    static String restDetailsIP = "http://192.168.137.1:4000";
 }

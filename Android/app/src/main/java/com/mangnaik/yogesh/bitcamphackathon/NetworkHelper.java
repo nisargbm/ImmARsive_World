@@ -7,6 +7,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -21,8 +22,8 @@ import java.io.FileOutputStream;
  * Created by Yogesh Mangnaik on 3/30/2019.
  */
 class NetworkHelper {
-    static void downloadFile(Context context, String url) {
-        // TODO handle the error
+
+    static void downloadFile(Context context, String url, DefaultCallback defaultCallback) {
         InputStreamVolleyRequest request = new InputStreamVolleyRequest(Request.Method.GET, url,
                 response -> {
                     try {
@@ -32,18 +33,22 @@ class NetworkHelper {
                                 dir.mkdirs();
                             File imageFile = new File(dir.getAbsoluteFile()+"/"+Constants.databaseFileName);
                             FileOutputStream stream = new FileOutputStream(imageFile);
-
                             try {
                                 stream.write(response);
                             } finally {
                                 stream.close();
                             }
+                            defaultCallback.callback(true);
                         }
                     } catch (Exception e) {
                         Log.d("ERROR!!", "NOT DOWNLOADED!!!");
+                        defaultCallback.callback(false);
                         e.printStackTrace();
                     }
-                }, Throwable::printStackTrace, null);
+                }, volleyError -> {
+                    defaultCallback.callback(false);
+                    volleyError.printStackTrace();
+                }, null);
         RequestQueue mRequestQueue = Volley.newRequestQueue(context, new HurlStack());
         mRequestQueue.add(request);
     }
@@ -59,7 +64,7 @@ class NetworkHelper {
                         Restaurant restaurant = parseJson(response);
                         callback.callback(restaurant);
                     }
-                }, error -> System.out.println(error));
+                }, Throwable::printStackTrace);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonObjectRequest);
     }

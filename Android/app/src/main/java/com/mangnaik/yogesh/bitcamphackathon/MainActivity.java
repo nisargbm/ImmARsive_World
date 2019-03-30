@@ -70,9 +70,10 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Setting up Augmented image database");
         AugmentedImageDatabase augmentedImageDatabase;
         String name="image.imgdb";
-        File dir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/");
+        File dir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/JustPoint");
         File imageFile = new File(dir.getAbsoluteFile()+"/"+name);
         InputStream inputStream = new FileInputStream(imageFile);
+        //InputStream inputStream = getAssets().open("image.imgdb");
         augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, inputStream);
         config.setAugmentedImageDatabase(augmentedImageDatabase);
         System.out.println("Augmented image database set up");
@@ -95,8 +96,9 @@ public class MainActivity extends AppCompatActivity {
         Collection<AugmentedImage> augmentedImages = frame.getUpdatedTrackables(AugmentedImage.class);
         for (AugmentedImage augmentedImage : augmentedImages) {
             if (augmentedImage.getTrackingState() == TrackingState.TRACKING) {
-                if (augmentedImage.getIndex() == 0 && shouldAddModel) {
+                if (shouldAddModel) {
                     System.out.println("Found image : " + augmentedImage.getName());
+                    System.out.println("Found ID : " + augmentedImage.getIndex());
                     Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     v.vibrate(500);
                     //placeObject(arFragment, augmentedImage.createAnchor(augmentedImage.getCenterPose()), Uri.parse("Lamborghini_Aventador.sfb"));
