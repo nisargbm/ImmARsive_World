@@ -42,3 +42,9 @@ sceneform.asset('Assets/model.obj',
         'default',
         'Assets/model.sfa',
         'src/main/assets/model')
+
+
+sceneform.asset('Assets/objpainting.obj',
+        'default',
+        'Assets/objpainting.sfa',
+        'src/main/assets/objpainting')

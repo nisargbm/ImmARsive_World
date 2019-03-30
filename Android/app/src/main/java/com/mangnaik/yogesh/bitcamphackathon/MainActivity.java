@@ -39,11 +39,12 @@ import com.google.ar.sceneform.ux.TransformableNode;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ARActivity{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
@@ -66,18 +67,24 @@ public class MainActivity extends AppCompatActivity {
         arFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
     }
 
-    public boolean setupAugmentedImagesDb(Config config, Session session) throws IOException {
-        System.out.println("Setting up Augmented image database");
-        AugmentedImageDatabase augmentedImageDatabase;
-        String name="image.imgdb";
-        File dir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/JustPoint");
-        File imageFile = new File(dir.getAbsoluteFile()+"/"+name);
-        InputStream inputStream = new FileInputStream(imageFile);
-        //InputStream inputStream = getAssets().open("image.imgdb");
-        augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, inputStream);
-        config.setAugmentedImageDatabase(augmentedImageDatabase);
-        System.out.println("Augmented image database set up");
-        return true;
+    @Override
+    public boolean setupAugmentedImagesDb(Config config, Session session) {
+        try{
+            System.out.println("Setting up Augmented image database");
+            AugmentedImageDatabase augmentedImageDatabase;
+            String name="image.imgdb";
+            File dir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/JustPoint");
+            File imageFile = new File(dir.getAbsoluteFile()+"/"+name);
+            InputStream inputStream = new FileInputStream(imageFile);
+            //InputStream inputStream = getAssets().open("image.imgdb");
+            augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, inputStream);
+            config.setAugmentedImageDatabase(augmentedImageDatabase);
+            System.out.println("Augmented image database set up");
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private Bitmap loadAugmentedImage() {

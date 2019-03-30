@@ -6,8 +6,6 @@ import com.google.ar.core.Config;
 import com.google.ar.core.Session;
 import com.google.ar.sceneform.ux.ArFragment;
 
-import java.io.IOException;
-
 /**
  * Created by Yogesh Mangnaik on 3/30/2019.
  */
@@ -23,14 +21,10 @@ public class CustomARFragment extends ArFragment {
         session.configure(config);
         getArSceneView().setupSession(session);
 
-        try {
-            if (((MainActivity)getActivity()).setupAugmentedImagesDb(config, session)) {
-                Log.d("SetupAugImgDb", "Success");
-            } else {
-                Log.e("SetupAugImgDb","Faliure setting up db");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (((ARActivity)getActivity()).setupAugmentedImagesDb(config, session)) {
+            Log.d("SetupAugImgDb", "Success");
+        } else {
+            Log.e("SetupAugImgDb","Faliure setting up db");
         }
         return config;
     }
