@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -22,9 +25,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.core.AugmentedImageDatabase;
@@ -101,16 +107,6 @@ public class MainActivity extends AppCompatActivity implements ARActivity{
         }
     }
 
-    private Bitmap loadAugmentedImage() {
-        System.out.println("Loading Augmented Images");
-        try (InputStream is = getAssets().open("car_image.png")) {
-            return BitmapFactory.decodeStream(is);
-        } catch (IOException e) {
-            Log.e("ImageLoad", "IO Exception", e);
-        }
-        return null;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void onUpdateFrame(FrameTime frameTime) {
         Frame frame = arFragment.getArSceneView().getArFrame();
@@ -149,6 +145,9 @@ public class MainActivity extends AppCompatActivity implements ARActivity{
         tvName.setText(restaurant.name);
         tvPrice.setText("Rs. : " + restaurant.costForTwo + " for Two");
         tvRating.setText(restaurant.aggRating+"\n"+restaurant.ratingText);
+        LinearLayout layout = view.findViewById(R.id.rating_layout);
+        layout.setBackgroundColor(Color.parseColor("#"+restaurant.hexColor));
+
     }
 
     private void addNodeToScene(ArFragment arFragment, Anchor anchor, Renderable renderable) {

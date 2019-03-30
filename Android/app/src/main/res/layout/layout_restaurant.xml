@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:alpha="0.8"
+    android:background="@null"
+    android:orientation="vertical"
     android:padding="20dp"
-    android:textColor="#fff"
-    android:background="@null">
-    
+    android:textColor="#fff">
+
     <LinearLayout
+        android:id="@+id/ll_cover"
         android:layout_width="300dp"
         android:layout_height="100dp"
         android:background="#6b655f"
-        android:id="@+id/ll_cover"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom|end"
-            android:textSize="18sp"
             android:layout_margin="15dp"
+            android:gravity="bottom|end"
             android:text="NAME"
-            android:id="@+id/tv_name" />
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -37,22 +36,24 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.65"
             android:layout_marginRight="8dp"
+            android:layout_weight="0.65"
             android:background="#681c7f"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_fortwo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="FOR TWO"
-                android:id="@+id/tv_fortwo"
+                android:textColor="#ffffff"
                 android:textSize="18sp" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/rating_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.35"
@@ -62,9 +63,10 @@
             <TextView
                 android:id="@+id/tv_rating"
                 android:layout_width="match_parent"
-                android:gravity="center"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="3.5*\nGOOD"
+                android:textColor="#ffffff"
                 android:textSize="18sp" />
 
 
@@ -73,19 +75,19 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_offers"
         android:layout_width="300dp"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:orientation="vertical"
         android:background="#00786d"
-        android:id="@+id/ll_offers" />
+        android:orientation="vertical" />
 
     <LinearLayout
+        android:id="@+id/ll_reviews"
         android:layout_width="300dp"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:orientation="vertical"
         android:background="#b84100"
-        android:id="@+id/ll_reviews" />
+        android:orientation="vertical" />
 
 </LinearLayout>
