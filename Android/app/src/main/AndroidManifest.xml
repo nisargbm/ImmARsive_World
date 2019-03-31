@@ -22,6 +22,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".LauncherActivity"></activity>
 
         <meta-data
             android:name="com.google.ar.core"
@@ -33,7 +34,10 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".LauncherActivity">
+        <activity android:name=".SplashActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,7 +49,7 @@
             android:name="com.google.ar.core"
             android:value="required" />
 
-        <activity android:name=".MuseumActivity"></activity>
+        <activity android:name=".MuseumActivity" />
     </application>
 
 </manifest>

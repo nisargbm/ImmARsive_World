@@ -1,5 +1,8 @@
 package com.mangnaik.yogesh.bitcamphackathon;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Yogesh Mangnaik on 3/30/2019.
  */
@@ -9,10 +12,15 @@ public class Restaurant {
     String ratingText;
     String hexColor;
     String costForTwo;
-    String[] bestOffers;
-    String[] reviews;
+    List<String> bestOffers;
+    List<String> reviews;
     String imageURL;
     String zomatoLink;
+
+    public Restaurant(){
+        bestOffers = new ArrayList<>();
+        reviews = new ArrayList<>();
+    }
 
     @Override
     public String toString() {
@@ -23,6 +31,7 @@ public class Restaurant {
         System.out.println(costForTwo);
         System.out.println(imageURL);
         System.out.println(zomatoLink);
+        System.out.println(reviews);
 //        System.out.println(name);
 //        System.out.println(name);
         return "";

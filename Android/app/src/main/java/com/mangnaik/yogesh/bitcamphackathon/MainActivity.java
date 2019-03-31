@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.core.AugmentedImageDatabase;
@@ -118,13 +119,15 @@ public class MainActivity extends AppCompatActivity implements ARActivity{
                     Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     v.vibrate(500);
                     String id = augmentedImage.getName().split("\\.")[0];
-                    System.out.println(id);
-                    NetworkHelper.getRestaurantDetails(id, new CallbackInterface() {
-                        @Override
-                        public void callback(Restaurant restaurant) {
-                            MainActivity.this.placeView(augmentedImage, restaurant);
-                            System.out.println(restaurant);
-                        }
+                    NetworkHelper.getRestaurantDetails(id, (Restaurant restaurant) -> {
+//                        MainActivity.this.placeView(augmentedImage, restaurant);
+                        NetworkHelper.getRestaurantReviews(this, id, restaurant, new CallbackInterface() {
+                                @Override
+                                public void callback(Restaurant rest) {
+                                    MainActivity.this.placeView(augmentedImage, restaurant);
+                                    System.out.println(restaurant);
+                                }
+                            });
                     }, this);
                     shouldAddModel = false;
                 }
@@ -141,12 +144,28 @@ public class MainActivity extends AppCompatActivity implements ARActivity{
         TextView tvName = view.findViewById(R.id.tv_name);
         TextView tvPrice = view.findViewById(R.id.tv_fortwo);
         TextView tvRating = view.findViewById(R.id.tv_rating);
+        TextView llReviews = view.findViewById(R.id.ll_reviews);
+        TextView tvOffers = view.findViewById(R.id.ll_offers);
+        LinearLayout ll_cover = view.findViewById(R.id.ll_cover);
+
+        Glide.with(this).load(restaurant.imageURL).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                ll_cover.setBackground(resource);
+            }
+        });
 
         tvName.setText(restaurant.name);
         tvPrice.setText("Rs. : " + restaurant.costForTwo + " for Two");
         tvRating.setText(restaurant.aggRating+"\n"+restaurant.ratingText);
         LinearLayout layout = view.findViewById(R.id.rating_layout);
+        tvOffers.setText("No ofers urrently available");
         layout.setBackgroundColor(Color.parseColor("#"+restaurant.hexColor));
+        String s = "Reviews : \n";
+        for(int i=0; i<restaurant.reviews.size() && i<3; i++){
+            s += i + ") " + restaurant.reviews.get(i) + "\n\n";
+        }
+        llReviews.setText(s);
 
     }
 

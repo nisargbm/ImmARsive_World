@@ -7,6 +7,7 @@ class Constants {
     //urls
     static String imgdbURL = "/fetchIMGDB";
     static String restDetailsURL = "/res/";
+    static String restReviewsURL = "/reviews/";
 
     //filenames
     static final String databaseFileName = "image.imgdb";
